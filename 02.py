@@ -8,7 +8,7 @@ def operations(path='02.txt'):
             yield op, int(x)
 
 
-def solve(p2):
+def solve():
     real_depth = aim_depth = pos = 0
     bsignum = lambda cond: int(cond) or -1 # helper to determine direction
 
@@ -17,11 +17,11 @@ def solve(p2):
 
         if op == 'forward':
             pos += x
-            if p2: real_depth += aim_depth * x
+            real_depth += aim_depth * x
 
         else: aim_depth += x * bsignum(op == 'down')
 
-    return (real_depth or aim_depth) * pos
+    return real_depth * pos, aim_depth * pos
 
 
-print(solve(p2=False), solve(p2=True))
+print(solve())
