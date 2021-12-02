@@ -5,22 +5,14 @@
 int main() {
 
     FILE *fp = fopen("02.txt", "r");
-    if (!fp)
-    {
-        exit(EXIT_FAILURE);
-    }
+    if (!fp) exit(EXIT_FAILURE);
 
     char op[16];
     int x, pos = 0, aim_depth = 0, real_depth = 0;
 
-    while(1)
+    do
     {
         fscanf(fp, "%s %d", op, &x);
-
-        if (feof(fp))
-        {
-            break;
-        }
 
         if(strcmp(op, "forward") == 0)
         {
@@ -37,7 +29,8 @@ int main() {
         {
             aim_depth += x;
         }
-    }
+
+    } while (!feof(fp));
 
     fclose(fp);
     printf("%d\n%d\n", aim_depth * pos, real_depth * pos);
