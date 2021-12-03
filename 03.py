@@ -1,23 +1,50 @@
+from operator import mul
+from pathlib import Path
+from collections import Counter
 
-from collections import Counter, defaultdict
-from pprint import pprint
-from operator import itemgetter
+decimal = lambda x: int(x, 2)
+TABLE = Path('03.txt').read_text().splitlines()
+LEN_ROW = len(TABLE[0])
 
-gamma = ''
-epsilon = ''
-c = defaultdict(Counter)
-decimal_coversion = lambda x: int(x, 2)
+def in_column(col, table):
+    """p1 & p2 helper, counts bits per column in table"""
+    c = Counter()
+    for line in table:
+        c[line[col]] += 1
+    return c
 
-with open('03.txt') as lines:
-    for line in map(str.rstrip, lines):
-        for i, bit in enumerate(line):
-            c[i][bit] += 1
+#################################################################################
 
-for v in c.values():
-    most, least = map(itemgetter(0), v.most_common())
-    gamma += most
-    epsilon += least
-gamma, epsilon = map(decimal_coversion, (gamma, epsilon))
+def p1(table=TABLE):
+    counters: list[Counter] = [in_column(col, table) for col in range(LEN_ROW)]
+    gamma = epsilon = ''
 
+    for c in counters:
+        (most, _), (least, _) = c.most_common()
+        gamma += most
+        epsilon += least
 
-print(gamma * epsilon)
+    return mul(*map(decimal, (gamma, epsilon)))
+
+#################################################################################
+
+def rating(bit_criteria, table=TABLE) -> int:
+    """Get rating value corresponding to given bit criteria (0: co2, 1: oxygen)"""
+    buff = ''
+
+    for i in range(1, LEN_ROW + 1):
+        if len(table) == 1: break
+
+        (most, cmost), (least, cleast) = in_column(i-1, table).most_common()
+        if cmost == cleast: buff += str(bit_criteria)
+        else: buff += most if bit_criteria else least
+
+        table = [row for row in table if row.startswith(buff)]
+
+    return decimal(table.pop())
+
+def p2():
+    return rating(1) * rating(0) # oxygen * co2
+
+#################################################################################
+print(p1(), p2())
