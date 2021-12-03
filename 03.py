@@ -6,7 +6,7 @@ decimal = lambda x: int(x, 2)
 TABLE = Path('03.txt').read_text().splitlines()
 LEN_ROW = len(TABLE[0])
 
-def in_column(col, table):
+def in_column(col: int, table: list[str]) -> Counter:
     """p1 & p2 helper, counts bits per column in table"""
     c = Counter()
     for line in table:
@@ -15,7 +15,7 @@ def in_column(col, table):
 
 #################################################################################
 
-def p1(table=TABLE):
+def p1(table: list[str]=TABLE) -> int:
     counters: list[Counter] = [in_column(col, table) for col in range(LEN_ROW)]
     gamma = epsilon = ''
 
@@ -28,14 +28,14 @@ def p1(table=TABLE):
 
 #################################################################################
 
-def rating(bit_criteria, table=TABLE) -> int:
+def rating(bit_criteria: int, table: list[str]=TABLE) -> int:
     """Get rating value corresponding to given bit criteria (0: co2, 1: oxygen)"""
     buff = ''
 
-    for i in range(1, LEN_ROW + 1):
+    for i in range(1, LEN_ROW):
         if len(table) == 1: break
 
-        (most, cmost), (least, cleast) = in_column(i-1, table).most_common()
+        (most, cmost), (least, cleast) = in_column(i - 1, table).most_common()
         if cmost == cleast: buff += str(bit_criteria)
         else: buff += most if bit_criteria else least
 
@@ -43,8 +43,8 @@ def rating(bit_criteria, table=TABLE) -> int:
 
     return decimal(table.pop())
 
-def p2():
-    return rating(1) * rating(0) # oxygen * co2
+def p2() -> int:
+    return rating(1) * rating(0)
 
 #################################################################################
 print(p1(), p2())
