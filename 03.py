@@ -41,6 +41,7 @@ def rating(bit_criteria: int, table: list[str]=TABLE) -> int:
 
     return decimal(table.pop())
 
+
 def p2() -> int:
     return rating(1) * rating(0)
 
