@@ -1,4 +1,3 @@
-from operator import mul
 from pathlib import Path
 from collections import Counter
 
@@ -12,7 +11,6 @@ def in_column(col: int, table: list[str]) -> Counter:
     for line in table:
         c[line[col]] += 1
     return c
-
 #################################################################################
 
 def p1(table: list[str]=TABLE) -> int:
@@ -24,7 +22,7 @@ def p1(table: list[str]=TABLE) -> int:
         gamma += most
         epsilon += least
 
-    return mul(*map(decimal, (gamma, epsilon)))
+    return decimal(gamma) * decimal(epsilon)
 
 #################################################################################
 
