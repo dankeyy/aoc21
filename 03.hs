@@ -34,10 +34,8 @@ binaryStringToInt = foldl' (\acc d -> acc * 2 + digitToInt d) 0
 
 
 mostCommon, leastCommon :: String -> Char
-mostCommon bits  = head $ maximumBy (comparing length) $ group $ sort bits-- countToBinaryString 1 . count
-leastCommon bits = head $ minimumBy (comparing length) $ group $ sort bits -- countToBinaryString 0 . count
-
-
+mostCommon bits  = head $ maximumBy (comparing length) $ group $ sort bits
+leastCommon bits = head $ minimumBy (comparing length) $ group $ sort bits
 
 
 -- my other approach to counting. problematic on leastCommon
@@ -54,7 +52,7 @@ leastCommon bits = head $ minimumBy (comparing length) $ group $ sort bits -- co
 --   | otherwise = case criteria of
 --                 1 -> '1'
 --                 0 -> '0'
-
 --                 _ -> error "bad criteria"
+
 -- mostCommon bits  = countToBinaryString 1 . count
 -- leastCommon bits = countToBinaryString 0 . count
