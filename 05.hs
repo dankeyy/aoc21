@@ -9,11 +9,11 @@ type CountDiagonals = Bool
 parse :: String -> [[Int]]
 parse x = map read . splitOn "," <$> splitOn " -> " x
 
-toCoordinateRange :: Bool -> [[Int]] -> Maybe [Point]
-toCoordinateRange countDiagonal [x1:y1:_, x2:y2:_]
-  | not countDiagonal = if x1 == x2 || y1 == y2 then Just base else Nothing
-  | otherwise = Just base
-  where base = zip (range x1 x2) (range y1 y2)
+toCoordinateRange :: CountDiagonals -> [[Int]] -> Maybe [Point]
+toCoordinateRange countDiagonals [x1:y1:_, x2:y2:_]
+  | not countDiagonals = if x1 == x2 || y1 == y2 then base else Nothing
+  | otherwise = base
+  where base = Just $ zip (range x1 x2) (range y1 y2)
         range start stop = [start, start + step ..stop]
           where step = signum $ stop - start
 toCoordinateRange _ _ = Nothing
@@ -22,7 +22,7 @@ countOverlap :: [Point] -> Int
 countOverlap = length . filter ((>=2) . length) . group . sort
 
 solve :: CountDiagonals -> [String] -> Int
-solve countDiagonal = countOverlap . concat . mapMaybe (toCoordinateRange countDiagonal . parse)
+solve countDiagonals = countOverlap . concat . mapMaybe (toCoordinateRange countDiagonals . parse)
 
 main :: IO ()
 main = print . (solve False &&& solve True) . lines =<< readFile "05.txt"
