@@ -1,9 +1,11 @@
+from math import ceil, floor
+
 def sigma(n):
-    return int(n * (n + 1) / 2)
+    return n * (n + 1) // 2
 
 
 def avg(xs):
-    return round(sum(xs) / len(xs))
+    return sum(xs) / len(xs)
 
 
 def p1(xs):
@@ -13,8 +15,8 @@ def p1(xs):
 
 
 def p2(xs):
-    return sum(sigma(abs(x-avg(xs))) for x in xs)
-
+    total_by = lambda f: sum(sigma(abs(f(x-avg(xs)))) for x in xs)
+    return min(total_by(ceil), total_by(floor))
 
 xs = [16,1,2,0,4,2,7,1,2,14]
 print(p1(xs), p2(xs))
