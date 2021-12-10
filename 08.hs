@@ -6,14 +6,13 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 ---------------------------------------------------------------------------------------------------------------------------------
-
 countUniques :: String -> Int
 countUniques line = length $ filter ((`elem` [2, 4, 3, 7]) . length) values
   where (_:values:_) = words <$> splitOn " | " line
 
 p1 = sum . map countUniques
----------------------------------------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------------------------------------
 interpretLine :: String -> Int
 interpretLine line = read $ catMaybes $ (`M.lookup` mapping) <$> values
   where
@@ -31,7 +30,7 @@ interpretLine line = read $ catMaybes $ (`M.lookup` mapping) <$> values
 
 
 p2 = sum . map interpretLine
----------------------------------------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------------------------------------
 main :: IO ()
 main = print . (p1 &&& p2) . lines =<< readFile "08.txt"
