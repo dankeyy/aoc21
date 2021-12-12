@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from functools import reduce
 
@@ -9,10 +10,8 @@ incomplete = lambda line: all(x in opening for x in line)
 corrupt = lambda line: not incomplete(line)
 
 def cleaned(line):
-    while any(p in line for p in pairs):
-        for p in pairs:
-            line = line.replace(p, '')
-    return line
+    return (line if all(p not in line for p in pairs)
+        else cleaned(re.sub(r"(\(\))|(\{\})|(\[\])|(\<\>)", "", line)))
 
 
 ##################################################################################
@@ -24,7 +23,7 @@ scoresA = {
     '>': 25137,
 }
 
-def corrupt_score(line) -> int:
+def corrupt_score(line):
     line = cleaned(line)
     return 0 if incomplete(line) else next(scoresA[x] for x in line if x not in opening)
 
