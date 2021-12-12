@@ -19,13 +19,13 @@ def low_points(m):
 
 
 def p1(m):
-    return sum(1 + m[r][c] for r, c in low_points(m))
+    return sum(1 + point(p, m) for p in low_points(m))
 
 
 def basins(m, p, seen=set()):
     seen.add(p)
-    return sum(1 + basins(m, p, seen) for p in adjacents(m, *p)
-               if p not in seen and point(p, m) != 9)
+    return sum(1 + basins(m, adj, seen) for adj in adjacents(m, *p)
+               if adj not in seen and point(adj, m) != 9)
 
 
 def p2(m):
