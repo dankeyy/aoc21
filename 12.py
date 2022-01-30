@@ -3,13 +3,9 @@ from collections import defaultdict
 
 
 def dfs(node, twice, graph, seen=frozenset()):
-    if node == 'end':
-        return 1
+    if node == 'end': return 1
 
-    if node == 'start' and node in seen:
-        return 0
-
-    if node in seen and node.islower() and twice:
+    if node in seen and node.islower() and twice and node != 'start':
         return sum(dfs(neighbor, False, graph, seen | {node}) for neighbor in graph[node])
 
     if node not in seen or node.isupper():
@@ -31,3 +27,6 @@ def main():
 
 
 main()
+
+# 5178
+# 130094
