@@ -1,3 +1,5 @@
+use warnings;
+use strict;
 use feature 'say';
 use Data::Dumper;
 
@@ -38,7 +40,8 @@ foreach (@folds) {
                         ? [($n * 2) % $points[$_][0], $points[$_][1]]
                         : $points[$_]
                 }
-            } (0..$#points));
+            } (0..$#points)
+    );
 
     # last; # break if p1
 }
@@ -56,14 +59,15 @@ say scalar @uniq_points;
 
 
 # p2, for which we actually have to draw the grid
-my @grid;
-for (0..@uniq_points) {
-    $grid[$uniq_points[$_][0]][$uniq_points[$_][1]] = '#';
+my (@grid, $i, $j);
+foreach (@uniq_points) {
+    ($i, $j) = @$_;
+    $grid[$i][$j] = '#';
 }
 
-for($row = 0; $row < $x; $row++) {
-    for($col = 0; $col < $y; $col++) {
-        print "$grid[$row][$col]" =~ '#' ? '#' : ' ';
+for(my $row = 0; $row < $x; $row++) {
+    for(my $col = 0; $col < $y; $col++) {
+        print defined($grid[$row][$col]) ? '#' : ' ';
     }
-    say;
+    print "\n";
 }
