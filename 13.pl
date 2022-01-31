@@ -1,7 +1,8 @@
 use feature 'say';
 use Data::Dumper;
 
-open(FILE, "13test01.txt") or die "lol";
+
+open(FILE, "13.txt") or die "lol";
 my (@points, @folds);
 
 while (<FILE>) {
@@ -17,33 +18,52 @@ while (<FILE>) {
     }
 }
 
-my ($dir, $n);
+
+my ($axis, $n, $x, $y);
 
 foreach (@folds) {
-    ($dir, $n) = split /=/, $_;
-    if ($dir =~ /y/) {
-        splice(@points, 0, $#points,
-               map {
-                   $points[$_][1] > $n
-                       ? [$points[$_][0], ($n * 2) % $points[$_][1]]
-                       : $points[$_]
-               } (0 .. $#points-1));
-    }
+    ($axis, $n) = split /=/, $_;
 
-    elsif ($dir =~ /x/) {
-        splice(@points, 0, $#points,
-               map {
-                   $points[$_][0] > $n
-                       ? [($n * 2) % $points[$_][0], $points[$_][1]]
-                       : $points[$_]
-               } (0 .. $#points -1));
-    }
-    last;
+         splice(@points, 0, scalar @points,
+                map {
+                    if ($axis =~ /y/) {
+                        $y = $n;
+                        $points[$_][1] > $n
+                            ? [$points[$_][0], ($n * 2) % $points[$_][1]]
+                            : $points[$_]
+                    }
+                    elsif ($axis =~ /x/) {
+                        $x = $n;
+                        $points[$_][0] > $n
+                            ? [($n * 2) % $points[$_][0], $points[$_][1]]
+                            : $points[$_]
+                    }
+                } (0 .. $#points));
+
+    # last; # break if p1
 }
+
 
 sub uniq {
     my %seen;
-    grep ! $seen{ Dumper $_ }++, @_
+    grep ! $seen{ Dumper $_ }++, @_;
+}
+my @uniq_points = uniq(@points);
+
+
+# p1
+say scalar @uniq_points;
+
+
+# p2, for which we actually have to draw the grid
+my @grid;
+for (0..@uniq_points) {
+    $grid[$uniq_points[$_][0]][$uniq_points[$_][1]] = '#';
 }
 
-say scalar uniq(@points);
+for($row = 0; $row < $x; $row++) {
+    for($col = 0; $col < $y; $col++) {
+        print "$grid[$row][$col]" =~ '#' ? '#' : ' ';
+    }
+    say;
+}
