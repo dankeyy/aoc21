@@ -24,21 +24,21 @@ my ($axis, $n, $x, $y);
 foreach (@folds) {
     ($axis, $n) = split /=/, $_;
 
-         splice(@points, 0, scalar @points,
-                map {
-                    if ($axis =~ /y/) {
-                        $y = $n;
-                        $points[$_][1] > $n
-                            ? [$points[$_][0], ($n * 2) % $points[$_][1]]
-                            : $points[$_]
-                    }
-                    elsif ($axis =~ /x/) {
-                        $x = $n;
-                        $points[$_][0] > $n
-                            ? [($n * 2) % $points[$_][0], $points[$_][1]]
-                            : $points[$_]
-                    }
-                } (0 .. $#points));
+    splice(@points, 0, scalar @points,
+            map {
+                if ($axis =~ /y/) {
+                    $y = $n;
+                    $points[$_][1] > $n
+                        ? [$points[$_][0], ($n * 2) % $points[$_][1]]
+                        : $points[$_]
+                }
+                elsif ($axis =~ /x/) {
+                    $x = $n;
+                    $points[$_][0] > $n
+                        ? [($n * 2) % $points[$_][0], $points[$_][1]]
+                        : $points[$_]
+                }
+            } (0..$#points));
 
     # last; # break if p1
 }
