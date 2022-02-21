@@ -29,7 +29,7 @@ def play(numbers, boards):
                 try: board[board.index(n)] = 'x'
                 except ValueError: pass
 
-                if score := bingo(board) is not None:
+                if score := bingo(board):
                     score *= int(n)
                     won.add(i)
                     yield score
@@ -39,7 +39,7 @@ def solve():
     game = play(*game_input())
 
     first = last = next(game)
-    for last in game:
+    for last in play(*game_input()):
         pass
 
     return first, last
