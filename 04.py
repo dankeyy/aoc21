@@ -20,33 +20,28 @@ def bingo(board):
 
 
 def play(numbers, boards):
+    won = set()
+
     for n in numbers:
         for i, board in enumerate(boards):
+            if i not in won:
 
-            try: board[board.index(n)] = 'x'
-            except ValueError: pass
+                try: board[board.index(n)] = 'x'
+                except ValueError: pass
 
-            if score := bingo(board):
-                score *= int(n)
-                yield i, score
-
-
-def p1():
-    _, score = next(play(*game_input()))
-    return score
+                if score := bingo(board) is not None:
+                    score *= int(n)
+                    won.add(i)
+                    yield score
 
 
-def p2():
-    numbers, boards = game_input()
-    game = play(numbers, boards)
-    losers = {*range(len(boards))}
+def solve():
+    game = play(*game_input())
 
-    while len(losers) != 1:
-        i, _ = next(game)
-        losers -= {i}
+    first = last = next(game)
+    for last in game:
+        pass
 
-    _, score = next(play(numbers, [boards[losers.pop()]]))
-    return score
+    return first, last
 
-    
-print(p1(), p2())
+print(solve())
