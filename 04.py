@@ -1,65 +1,52 @@
-from itertools import islice
+from pathlib import Path
 
-def game_input(path='04test.txt'):
-    boards = []
+def game_input(path='04.txt'):
+    numbers, *boards = Path(path).read_text().split('\n\n')
 
-    with open(path) as f:
-        numbers_drawn = next(f).rstrip().split(',')
-        next(f)
+    numbers = numbers.strip().split(',')
+    boards = [*map(str.split, boards)]
+    return numbers, boards
 
-        while board := ''.join(islice(f, 5)).split():
-            next(f, None)
-            boards.append(board)
-
-    return numbers_drawn, boards
-
-
-_marked    = lambda seq: set(seq) == {'x'}
-_row_bingo = lambda n, board: _marked(board[n*5: (n+1)*5])
-_col_bingo = lambda n, board: _marked(board[n::5])
 
 def bingo(board):
-    return any(_col_bingo(n, board) or _row_bingo(n, board) for n in range(5))
+    for n in range(5):
+        all_marked_row = all(square == 'x' for square in board[n * 5: (n+1) * 5])
+        all_marked_col = all(square == 'x' for square in board[n::5])
 
-def sum_unmarked(board) -> int:
-    return sum(int(cell) for cell in board if cell != 'x')
+        if all_marked_row or all_marked_col:
+            unmarked_board_count = sum(int(cell) for cell in board if cell != 'x')
 
-def try_mark(b, n):
-    try:
-        hit = b.index(n)
-        b[hit] = 'x'
-    except ValueError: pass
+            return unmarked_board_count
 
 
-def iterate_until_bingo(numbers, boards):
+def play(numbers, boards):
     for n in numbers:
-        for b in boards:
-            try_mark(b, n)
+        for i, board in enumerate(boards):
 
-            if bingo(b):
-                return int(n) * sum_unmarked(b)
+            try: board[board.index(n)] = 'x'
+            except ValueError: pass
+
+            if score := bingo(board):
+                score *= int(n)
+                yield i, score
 
 
-def solve1():
-    return iterate_until_bingo(*game_input())
+def p1():
+    _, score = next(play(*game_input()))
+    return score
 
 
-def solve2():
+def p2():
     numbers, boards = game_input()
-    didnt_win = {*range(len(boards))}
+    game = play(numbers, boards)
+    losers = {*range(len(boards))}
 
-    for nid, n in enumerate(numbers):
-        for bid, b in enumerate(boards):
+    while len(losers) != 1:
+        i, _ = next(game)
+        losers -= {i}
 
-            if bid in didnt_win:
-                try_mark(b, n)
+    _, score = next(play(numbers, [boards[losers.pop()]]))
+    return score
 
-                if bingo(b):
-                    if len(didnt_win) == 1:
-                        loser = boards[ didnt_win.pop() ]
-                        return iterate_until_bingo(numbers[nid:], [loser])
-
-                    didnt_win -= {bid}
-
-
-print(solve1(), solve2())
+    
+print(p1(), p2())
