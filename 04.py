@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-def game_input(path='data.txt'):
+def game_input(path='04.txt'):
     numbers, *boards = Path(path).read_text().split('\n\n')
 
     numbers = numbers.strip().split(',')
