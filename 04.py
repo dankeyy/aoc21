@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-def game_input(path='04.txt'):
+def game_input(path='data.txt'):
     numbers, *boards = Path(path).read_text().split('\n\n')
 
     numbers = numbers.strip().split(',')
@@ -37,8 +37,10 @@ def play(numbers, boards):
 
 
 def solve():
-    first = last = next(play(*game_input()))
-    for last in play(*game_input()):
+    game = game_input()
+
+    first = last = next(play(*game))
+    for last in play(*game):
         pass
 
     return first, last
