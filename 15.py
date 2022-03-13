@@ -1,16 +1,17 @@
 from heapq import heappop, heappush
-from pathlib import Path
-
-grid = [[*map(int, list(x))] for x in Path('15.txt').read_text().splitlines()]
-neighbors = lambda x, y: ((x+1, y), (x, y+1), (x-1, y), (x, y-1))
 
 
-def solve(grid, ratio=5):
-    w, h = len(grid[0]), len(grid)
+GRID = [[*map(int, line.rstrip())] for line in open('15.txt')]
+
+
+def solve(ratio):
+    w, h = len(GRID[0]), len(GRID)
     end = (w * ratio -1, h * ratio -1)
 
-    graph = {(x, y) : grid[x][y] for x in range(h) for y in range(w)}
-    bounded = lambda x, y: 0 <= x < h*ratio and 0 <= y < w*ratio
+    bounded   = lambda x, y: 0 <= x < h*ratio and 0 <= y < w*ratio
+    neighbors = lambda x, y: ((x+1, y), (x, y+1), (x-1, y), (x, y-1))
+
+    graph = {(x, y) : GRID[x][y] for x in range(h) for y in range(w)}
     heap = [(0, (0,0))]
     visited = set()
 
@@ -30,5 +31,5 @@ def solve(grid, ratio=5):
                 heappush(heap, (risk + risk_so_far, neighbor))
 
 
-print(solve(grid, ratio=1)) # part 1
-print(solve(grid, ratio=5)) # part 2
+print(solve(ratio=1)) # part 1
+print(solve(ratio=5)) # part 2
