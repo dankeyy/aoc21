@@ -11,22 +11,28 @@ test = [4,1,3,2,4,3,1,4,4,1,1,1,5,2,4,4,2,1,2,3,4,1,2,4,3,4,
        5,5,1,2,1,2,1,2,3,1,1,3,1,1,2,1,1,3,4,3,1,1,3,3,5,1,
        2,1,4,1,1,2,1,3,1,1,1,1,1,1,1,4,5,5,1,1,1,4,1,1,1,2,
        1,2,1,3,1,3,1,1,1,1,1,1,1,5]
-x = [test.count(i) for i in range(9)]
+
+xs = [0] * 9
+for x in test:
+    xs[x] += 1
 
 
-def update(x):
-    buffer = x[0]
+def update(xs):
+    buffer = xs[0]
 
     for i in range(8):
-        x[i] = x[i+1]
+        xs[i] = xs[i+1]
 
-    x[8] = buffer
-    x[6] += buffer
+    xs[8] = buffer
+    xs[6] += buffer
 
-    return x
+    return xs
 
 
-for _ in range(256):
-    x = update(x)
+for i in range(256):
+    xs = update(xs)
 
-print(sum(x))
+    if i == 79:
+        print(sum(xs)) # p1
+
+print(sum(xs)) # p2

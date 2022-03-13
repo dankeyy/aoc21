@@ -14,8 +14,11 @@ def in_column(col: int, table: list[str]) -> Counter:
     return c
 
 
-def p1(table: list[str]=TABLE) -> int:
-    counters: list[Counter] = [in_column(col, table) for col in range(LEN_ROW)]
+def p1() -> int:
+    counters: list[Counter] = [
+        in_column(col, TABLE)
+        for col in range(LEN_ROW)
+    ]
     gamma = epsilon = ''
 
     for c in counters:
@@ -26,16 +29,20 @@ def p1(table: list[str]=TABLE) -> int:
     return decimal(gamma) * decimal(epsilon)
 
 
-def rating(bit_criteria: int, table: list[str]=TABLE) -> int:
+def rating(bit_criteria: int) -> int:
     """p2 helper to get rating value corresponding to given bit criteria (0: co2, 1: oxygen)"""
+    table = TABLE.copy()
     buff = ''
 
     for i in range(1, LEN_ROW):
-        if len(table) == 1: break
+        if len(table) == 1:
+            break
 
         (most, cmost), (least, cleast) = in_column(i - 1, table).most_common()
-        if cmost == cleast: buff += str(bit_criteria)
-        else: buff += most if bit_criteria else least
+        if cmost == cleast:
+            buff += str(bit_criteria)
+        else:
+            buff += most if bit_criteria else least
 
         table = [row for row in table if row.startswith(buff)]
 
@@ -46,4 +53,5 @@ def p2() -> int:
     return rating(1) * rating(0)
 
 
-print(p1(), p2())
+print(p1())
+print(p2())
