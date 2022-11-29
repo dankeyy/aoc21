@@ -9,7 +9,7 @@ function parse(s: string): RangePoints {
 }
 
 
-function step(x: number, y: number, xv: number, yv: number) {
+function step(x: number, y: number, xv: number, yv: number): RangePoints {
     x += xv;
     y += yv;
     xv = xv < 0 ? xv+1 : xv > 0 ? xv-1 : xv; // adjustment due to drag
@@ -18,7 +18,7 @@ function step(x: number, y: number, xv: number, yv: number) {
 }
 
 
-function iterateFrom(r: RangePoints, xv: number, yv: number): number | undefined {
+function iterateFrom(r: RangePoints, xv: number, yv: number): number {
     let x = 0, y = 0, maxHeight = 0;
     let [[x0, x1],[y0, y1]] = r;
 
@@ -28,7 +28,7 @@ function iterateFrom(r: RangePoints, xv: number, yv: number): number | undefined
         }
 
         else if (x > x1 || y < y0) {
-            return undefined;
+            return -1;
         }
 
         else {
@@ -40,7 +40,7 @@ function iterateFrom(r: RangePoints, xv: number, yv: number): number | undefined
 }
 
 
-function solve(s: string) {
+function solve(s: string): [number, number] {
     let r: RangePoints = parse(s);
     let height = 0, maxHeight = 0, c = 0;
 
@@ -56,12 +56,13 @@ function solve(s: string) {
     for (let i = -500; i < 500; i++) {
         for (let j = -500; j < 500; j++) {
             height = iterateFrom(r, i, j);
-            if (height !== undefined) {
+            if (height !== -1) {
                 c++;
                 maxHeight = height > maxHeight ? height : maxHeight;
             }
         }
     }
+    //      part 1   , part 2
     return [maxHeight, c];
 }
 
