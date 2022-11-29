@@ -12,7 +12,7 @@ function parse(s: string): RangePoints {
 function step(x: number, y: number, xv: number, yv: number): RangePoints {
     x += xv;
     y += yv;
-    xv = xv < 0 ? xv+1 : xv > 0 ? xv-1 : xv; // adjustment due to drag
+    xv -= Math.sign(xv); // adjustment due to drag
     yv--;
     return [[x, y], [xv, yv]];
 }
